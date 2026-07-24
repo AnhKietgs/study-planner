@@ -11,8 +11,6 @@
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
 - [Installation](#-installation)
-- [Environment Variables](#-environment-variables)
-- [Backend API Integration](#-backend-api-integration)
 - [Routing & Pages](#-routing--pages)
 - [Authentication](#-authentication)
 - [Request Flow](#-request-flow)
@@ -20,9 +18,8 @@
 - [Security](#-security)
 - [PWA & Offline Support](#-pwa--offline-support)
 - [Available Scripts](#-available-scripts)
-- [Dependencies](#-dependencies)
-- [Deployment](#-deployment)
-- [Future Improvements](#-future-improvements)
+
+
 
 ---
 
