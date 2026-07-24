@@ -1,7 +1,6 @@
 # 📚 Study Planner Backend
 
-Backend API cho **Hệ thống hỗ trợ lập kế hoạch học tập cho sinh viên** (Study Planner), được xây dựng bằng Node.js, Express và Prisma ORM trên nền PostgreSQL. Đây là mô tả này được lấy trực tiếp từ trường `description` trong `package.json`.
-
+Backend API cho **Hệ thống hỗ trợ lập kế hoạch học tập cho sinh viên** (Study Planner), được xây dựng bằng Node.js, Express và Prisma ORM trên nền PostgreSQL.
 ---
 
 ## 📑 Mục lục
@@ -71,20 +70,20 @@ Cây thư mục dưới đây được lấy đúng theo thực tế của thư 
 ```text
 Server/
 ├── README.md
-├── index.js                     # File rỗng, không có nội dung
+├── index.js                     
 ├── package.json
 ├── package-lock.json
-├── prisma.config.ts              # Cấu hình Prisma (schema path, migrations path, datasource url)
-├── server.js                     # Entry point: nạp .env, khởi động app + cron job
+├── prisma.config.ts              
+├── server.js                     
 ├── prisma/
-│   ├── schema.prisma              # Định nghĩa models: User, Subject, Task, StudySession, ClassSchedule
+│   ├── schema.prisma              
 │   └── migrations/
 │       ├── migration_lock.toml
 │       └── 20260223060635_init/migration.sql
 └── src/
-    ├── app.js                     # Khởi tạo Express app, gắn middleware & routes
+    ├── app.js                     
     ├── config/
-    │   └── db.js                  # Khởi tạo PrismaClient dùng chung
+    │   └── db.js                  
     ├── controllers/
     │   ├── analytics.controller.js
     │   ├── auth.controller.js
@@ -94,10 +93,10 @@ Server/
     │   ├── task.controller.js
     │   └── user.controller.js
     ├── cron/
-    │   └── priorityUpdater.js     # Cron job cập nhật priority mỗi ngày lúc 00:00
+    │   └── priorityUpdater.js     
     ├── middlewares/
-    │   ├── auth.middleware.js     # Middleware verifyToken (xác thực JWT)
-    │   └── error.middleware.js    # Global error handler
+    │   ├── auth.middleware.js     
+    │   └── error.middleware.js    
     ├── routes/
     │   ├── analytics.routes.js
     │   ├── auth.routes.js
@@ -107,20 +106,19 @@ Server/
     │   ├── task.routes.js
     │   └── user.routes.js
     ├── utils/
-    │   ├── date.utils.js          # getCurrentWeekParity() – tính tuần chẵn/lẻ
-    │   ├── jwt.utils.js           # generateToken(), verifyTokenBase()
-    │   └── priority.utils.js      # calculateAutoPriority(deadline)
+    │   ├── date.utils.js         
+    │   ├── jwt.utils.js           
+    │   └── priority.utils.js      
     └── validations/
-        └── auth.validator.js      # registerValidator, loginValidator, changePasswordValidator
+        └── auth.validator.js      
 ```
 
-> Ghi chú: `services/`, `models/`, `uploads/`, `public/`, `scripts/` **không tồn tại** trong source code — Không tìm thấy trong source code.
+
 
 ---
 
 ## 🚀 Installation
 
-Lệnh cài đặt được lấy đúng theo `scripts` trong `package.json`:
 
 ```bash
 git clone https://github.com/AnhKietgs/study-planner.git
@@ -143,21 +141,6 @@ Chạy ở môi trường production:
 npm start
 ```
 
----
-
-## 🔑 Environment Variables
-
-Danh sách biến môi trường được xác định từ việc quét toàn bộ mã nguồn (`process.env.*`). Không có file `.env.example` trong source code, nên các mô tả dưới đây được suy ra từ ngữ cảnh sử dụng trong code:
-
-| Variable | Description |
-| -------- | ----------- |
-| `DATABASE_URL` | Chuỗi kết nối PostgreSQL, dùng trong `prisma/schema.prisma` (`datasource db { url = env("DATABASE_URL") }`) và `prisma.config.ts` |
-| `JWT_SECRET` | Khóa bí mật để ký/xác thực JWT, dùng trong `auth.controller.js`, `auth.middleware.js`, `jwt.utils.js` |
-| `JWT_EXPIRES_IN` | Thời gian sống của token, dùng trong `jwt.utils.js` (nếu không set, mặc định `"7d"`) |
-| `PORT` | Cổng chạy server, dùng trong `server.js` (nếu không set, mặc định `5000`) |
-| `NODE_ENV` | Môi trường chạy (`development`/`production`), dùng trong `server.js` để log và trong `error.middleware.js` để quyết định có trả về `stack trace` hay không |
-
-> File `.env` đã được thêm vào `.gitignore` nên không xuất hiện trong repository.
 
 ---
 
@@ -184,9 +167,6 @@ Danh sách biến môi trường được xác định từ việc quét toàn b
 - `ClassSchedule.userId` → `User.id`, **onDelete: Cascade**
 - `ClassSchedule.subjectId` → `Subject.id`, **onDelete: Cascade**
 
-### Enum
-
-Không tìm thấy trong source code (schema không định nghĩa `enum` nào; các giá trị như trạng thái task hay recurrence chỉ là `String`/`Int` với giá trị quy ước trong code, không phải Prisma enum).
 
 ### Sơ đồ ERD
 
@@ -318,8 +298,6 @@ Tất cả route được gắn tiền tố base path theo `src/app.js`.
 
 ## 🔐 Authentication
 
-Theo mã nguồn thực tế trong `auth.controller.js`, `auth.middleware.js`, `jwt.utils.js`:
-
 - **Register**: kiểm tra email đã tồn tại chưa (`prisma.user.findUnique`), hash mật khẩu bằng `bcrypt.genSalt(10)` + `bcrypt.hash`, lưu user vào database.
 - **Login**: tìm user theo email, so sánh mật khẩu bằng `bcrypt.compare`, nếu hợp lệ thì ký JWT bằng `jwt.sign({ id, email }, process.env.JWT_SECRET, { expiresIn: "7d" })`.
 - **Verify Token**: middleware `verifyToken` (trong `auth.middleware.js`) đọc header `Authorization: Bearer <token>`, giải mã bằng `jwt.verify`, gắn payload vào `req.user`. Nếu thiếu header hoặc sai định dạng → trả `401`; nếu token không hợp lệ/hết hạn → trả `403`.
@@ -346,8 +324,6 @@ Prisma Client (src/config/db.js)
   ↓
 PostgreSQL Database
 ```
-
-> Ghi chú: Không tìm thấy trong source code tầng `service/` riêng biệt — controller gọi trực tiếp Prisma Client, không qua lớp service trung gian.
 
 ---
 
@@ -381,8 +357,6 @@ PostgreSQL Database
 
 ## 📜 Available Scripts
 
-Lấy nguyên văn từ mục `scripts` trong `package.json`:
-
 | Script | Purpose |
 | ------ | ------- |
 | `npm start` | Chạy server bằng `node server.js` |
@@ -394,8 +368,6 @@ Lấy nguyên văn từ mục `scripts` trong `package.json`:
 ---
 
 ## 📦 Dependencies
-
-Lấy nguyên văn từ `package.json`.
 
 ### Production
 
@@ -419,28 +391,3 @@ Lấy nguyên văn từ `package.json`.
 | `nodemon` | ^3.1.14 |
 
 ---
-
-## 🚢 Deployment
-
-Không tìm thấy trong source code — không có file cấu hình `Dockerfile`, `docker-compose`, `Procfile`, hay cấu hình Railway/Render/PM2 nào trong thư mục `Server`.
-
----
-
-## 💡 Future Improvements
-
-Đề xuất dựa trên kiến trúc hiện tại (chưa tồn tại trong source code):
-
-1. Thêm lớp **service** trung gian giữa controller và Prisma để tách biệt logic nghiệp vụ khỏi tầng HTTP.
-2. Bổ sung **rate limiting** (ví dụ `express-rate-limit`) để chống brute-force ở endpoint `/login`.
-3. Thống nhất cách xử lý lỗi: hiện `auth.controller.js` và một số hàm trong `task.controller.js` không dùng `next(error)` như phần còn lại của codebase.
-4. Viết **automated tests** (unit/integration) — hiện chưa thấy thư mục test nào trong source code.
-5. Thêm **refresh token** để tránh phải đăng nhập lại sau khi JWT hết hạn 7 ngày.
-6. Bổ sung **API documentation chuẩn (Swagger/OpenAPI)** để dễ tích hợp với frontend.
-7. Thêm **Dockerfile/docker-compose** để chuẩn hóa môi trường triển khai.
-8. Bổ sung **logging có cấu trúc** (ví dụ Winston/Pino) thay vì chỉ dùng `console.log`/`console.error`.
-9. Thêm **validation** cho các route `subjects`, `tasks`, `schedule` (hiện chỉ có validator cho `auth`).
-10. Cấu hình **CORS whitelist** theo domain frontend cụ thể thay vì dùng `cors()` mặc định (cho phép tất cả origin).
-
----
-
-*README này được tạo tự động dựa trên phân tích toàn bộ source code trong thư mục `Server` của repository [AnhKietgs/study-planner](https://github.com/AnhKietgs/study-planner). Mọi thông tin không xác định được từ mã nguồn đều được ghi rõ "Không tìm thấy trong source code."*
