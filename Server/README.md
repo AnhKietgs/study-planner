@@ -17,10 +17,6 @@ Backend API cho **Hệ thống hỗ trợ lập kế hoạch học tập cho sin
 - [Error Handling](#-error-handling)
 - [Security](#-security)
 - [Available Scripts](#-available-scripts)
-- [Dependencies](#-dependencies)
-- [Deployment](#-deployment)
-- [Future Improvements](#-future-improvements)
-
 ---
 
 ## ✨ Features
@@ -364,30 +360,5 @@ PostgreSQL Database
 | `npm run db:push` | Đẩy schema Prisma lên database (`prisma db push`) |
 | `npm run db:studio` | Mở Prisma Studio để xem/chỉnh dữ liệu (`prisma studio`) |
 | `npm run db:generate` | Sinh Prisma Client (`prisma generate`) |
-
----
-
-## 📦 Dependencies
-
-### Production
-
-| Package | Version |
-| ------- | ------- |
-| `@prisma/client` | ^5.22.0 |
-| `bcrypt` | ^5.1.1 |
-| `cors` | ^2.8.5 |
-| `dotenv` | ^16.4.5 |
-| `express` | ^4.18.3 |
-| `express-validator` | ^7.0.1 |
-| `helmet` | ^7.1.0 |
-| `jsonwebtoken` | ^9.0.2 |
-| `node-cron` | ^4.2.1 |
-| `prisma` | ^5.22.0 |
-
-### Development
-
-| Package | Version |
-| ------- | ------- |
-| `nodemon` | ^3.1.14 |
 
 ---
